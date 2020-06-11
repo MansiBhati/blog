@@ -18,4 +18,4 @@ $$\phi(H)=\phi_1=0.3696 \exp(-0.4166 |r-R_1|^2)$$
 
 $$\phi(He)=\phi_2=0.5881 \exp(-0.7739 |r-R_2|^2)$$
 
-Here **|r-Ri|** is the distance of the electron in $$\phi_i$$ from i<sup>th</sup> nucleus.The b constant in the helium exponent is larger when compared to hydrogen (0.7739 vs. 0.4166) since an electron in $$\phi_2$$ is more tightly bound to the doubly charged helium nucleus when compared to singly charged hydrogen nucleus. Thus, the electron density of the Helium nucleus falls off more quickly.
+Here |r-Ri| is the distance of the electron in $$\phi_i$$ from i<sup>th</sup> nucleus.The b constant in the helium exponent is larger when compared to hydrogen (0.7739 vs. 0.4166) since an electron in $$\phi_2$$ is more tightly bound to the doubly charged helium nucleus when compared to singly charged hydrogen nucleus. Thus, the electron density of the Helium nucleus falls off more quickly.
