@@ -118,7 +118,7 @@ $$S = P.D.P^{-1}$$
 
 1. Build the symmetric orthogonalisation matrix S-1/2
 
-$$S^{-1/2} = PD^{-1/2}P{-1}$$
+$$S^{-1/2} = PD^{-1/2}P^{-1}$$
 
 ```python
 for i in Sf: 
@@ -164,7 +164,7 @@ Form the new Fock matrix including the two-electron contribution.
 
 ### Step6: The Self-Consistent Field Iteration
 
-1.Transform the new Fock matrix to the orthonormal basis.
+1. Transform the new Fock matrix to the orthonormal basis.
 
 1. Transform the resulting eigenvectors into the original (non-orthonormal) basis
 
