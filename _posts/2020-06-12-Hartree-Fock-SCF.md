@@ -100,6 +100,7 @@ Core Hamiltoninan:
 Here we observe that T<sub>11</sub> is smaller than T<sub>22</sub> i.e. the kinetic energy of an electron in $$\phi_1 \:(\phi(H))$$ is smaller than an electron in $$\phi_2 \:(\phi(He))$$ which is expected as the electron around the stronger-pulling He nucleus needs to move faster to stay in its orbit around it. While T<sub>11</sub> denotes the kinetic energy of the electron in the H(1s)-He(1s) overlap region. 
 
 $$V(H)= \left( \begin{array}{cc} -1.0300 & -0.4445 \\ -0.4445 & -0.6563 \end{array} \right) $$
+
 $$V(He)= \left( \begin{array}{cc} -1.2555 & -1.1110 \\ -1.1110 & -2.8076 \end{array} \right) $$
 
 The total potential energy matrix can be disintegrated into the magnitude of attraction of the electron to the H and He nucleus. Here V<sub>11</sub>(H) represents the attraction of an electron in $$\phi_1$$ to the hydrogen nucleus which is understandably larger than the V<sub>22</sub>(H) representing the attraction of an electron in $$\phi_2$$ to the hydrogen nucleus since the electron in $$\phi_1 \:(\phi(H))$$ is attracted more strongly to the H nucleus than the electron in $$\phi_2 \:(\phi(He))$$. While V<sub>12</sub>(H) represents the attraction of an electron present in the H(1s)-He(1s) overlap region to the H nucleus. Similar arguments are true for V(He) also. 
