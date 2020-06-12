@@ -81,7 +81,7 @@ for i in range(m):
 #print('Core Hamiltoninan:\n\n', H,'\n\n')  
 ```
 
-```output
+```python
 Nuclear Attraction Intergrals:
 -2.2855 -1.5555
 -1.5555 -3.4639
