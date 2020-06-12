@@ -152,17 +152,15 @@ S^-1/2 Matrix:
 
 ### Step4: Calculation of initial guess density matrix
  
-1. Form an initial Fock matrix F, in the orthonormal basis using the core Hamiltonian H<sub>core</sub>.
-
-$$F_0' = \tilde{S}^{-1/2} H^{core} S^{-1/2}$$
+1. Form an initial Fock matrix F, in the orthonormal basis using the core Hamiltonian H<sub>core</sub>. $$F'_0 = \tilde{S}^{-1/2} H^{core} S^{-1/2}$$
 
 2. Diagonalise F
 
-$$F_0'C_0' = C_0'\epsilon$$
+$$F'_0C'_0 = C'_0\epsilon$$
 
 3. Transform the resulting eigenvectors into the original (non-orthonormal) basis
 
-$$C_0= S^{-1/2} C_0'$$
+$$C_0= S^{-1/2} C'_0$$
 
 4. Construct the initial-guess density matrix. 
 
@@ -191,7 +189,7 @@ $$F_{rs}=H^{core}_{rs} + \sum_{t=1}^m\sum_{u=1}^m P_{tu}[(rs|tu)-\frac{1}{2}(ru|
 
 1. Transform the new Fock matrix to the orthonormal basis.
 
-$$F' = \~{S^{-1/2}} H^{core} S^{-1/2}$$
+$$F' = \tilde{S}^{-1/2} H^{core} S^{-1/2}$$
 
 2. Transform the resulting eigenvectors into the original (non-orthonormal) basis
 
