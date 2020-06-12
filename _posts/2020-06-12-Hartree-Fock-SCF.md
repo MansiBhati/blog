@@ -20,6 +20,10 @@ $$\phi(He)=\phi_2=0.5881 \exp(-0.7739 |r-R_2|^2)$$
 
 Here **(r-Ri)** is the distance of the electron in $$\phi_i$$ from i<sup>th</sup> nucleus.The b constant in the helium exponent is larger when compared to hydrogen (0.7739 vs. 0.4166) since an electron in $$\phi_2$$ is more tightly bound to the doubly charged helium nucleus when compared to singly charged hydrogen nucleus. Thus, the electron density of the Helium nucleus falls off more quickly.
 
+<img class="image image--md" src="{{site.baseurl}}/assets/images/1.jpg"/>
+
+![Image]({{site.baseurl}}/assets/images/1.jpg "Coordinate system")
+
 ### Step2: Calculation of one electron integrals.
 
 Here we extract all the one-electron integrals needed to form the Fock matrix from their respective files and then store them as matrices. To form core Hamiltonian H<sup>core</sup> we add the kinetic energy integral to the two potential energy intervals, V(H) and V(He). 
@@ -110,6 +114,8 @@ The total potential energy matrix can be disintegrated into the magnitude of att
 
 1. Read the overlap integral file and store them as a NumPy array. 
 
+$$S_{rs} = \int \phi_r(r)\phi_s(r)dr$$
+
 1. Diagonalising the overlap matrix S.
 
 $$S = P.D.P^{-1}$$
@@ -148,31 +154,58 @@ S^-1/2 Matrix:
  
 1. Form an initial Fock matrix F, in the orthonormal basis using the core Hamiltonian H<sub>core</sub>.
 
+$$F_0^' = \~{S^{-1/2}} H^{core} S^{-1/2}$$
+
 1. Diagonalise F
+
+$$F_0^'C_0^' = C_0^'\epsilon$$
 
 1. Transform the resulting eigenvectors into the original (non-orthonormal) basis
 
+$$C_0= S^{-1/2} C_0^'$$
+
 1. Construct the initial-guess density matrix. 
+
+$$D_{rs}^0 = 2 \sum_m^{occ}(C_0)_r^m(C_0)_s^m$$
 
 ### Step5: Calculation of two-electron integrals
 
-Grs equation 5.104
+$$+G_{rs}= \sum_{t=1}^m\sum_{u=1}^m P_{tu}[(rs|tu)-\frac{1}{2}(ru|ts)]$$
+
 Therefore, each element of the electron repulsion matrix G has eight 2-electron repulsion integrals, making up a total of 32 integrals. However, many of these are the same, and there are only six unique 2-electron repulsion integrals given in the file. 
 
-Read these unique two-integrals from the file and store them in a one-dimensional array using a compound index. 
-Form the new Fock matrix including the two-electron contribution. 
+$$(rs|tu)=(rs|ut)=(sr|tu)=(sr|ut)=(tu|rs)=(tu|sr)=(ut|rs)=(ut|sr)$$
+
+![Image]({{site.baseurl}}/assets/images/overlap.jpg "2-electron repulsion")
+
+1. Read these unique two-integrals from the file and store them in a one-dimensional array using a compound index.
+
+1. Form the new Fock matrix including the two-electron contribution.
+
+$$F_{rs}=H^{core}_{rs} + \sum_{t=1}^m\sum_{u=1}^m P_{tu}[(rs|tu)-\frac{1}{2}(ru|ts)]
+=T_{rs} + V_{rs}(H) +V_{rs}(He)+G_{rs}$$
 
 ### Step6: The Self-Consistent Field Iteration
 
 1. Transform the new Fock matrix to the orthonormal basis.
 
+$$F^' = \~{S^{-1/2}} H^{core} S^{-1/2}$$
+
 1. Transform the resulting eigenvectors into the original (non-orthonormal) basis
+
+$$C= S^{-1/2} C^'$$
 
 1. Construct the new-guess density matrix.
 
+$$D_{rs}^0 = 2 \sum_m^{occ}(C)_r^m(C)_s^m$$
+
 1. Test for convergence using delta.
 
+$$\left[\frac{\sum_{rs}^{AO}(D_{rs}^i-D_{rs}^{i-1})}{4}\right]^{1/2} <\delta_1$$
+
 1. Display the final energy by computing total electronic energy and adding to it the nuclear energy read from the text file.
+
+$$E_{total}^0 = E_{elec}^0 +E_{nuc}$$
 
 ```python
 #This function is to form initial Fock matrix in the orthonormal basis
