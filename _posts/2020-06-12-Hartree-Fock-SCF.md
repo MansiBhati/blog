@@ -150,19 +150,18 @@ S^-1/2 Matrix:
 
 ### Step4: Calculation of initial guess density matrix
  
-1. Form an initial Fock matrix F, in the orthonormal basis using the core Hamiltonian H<sub>core</sub>. $$F'_0 = \tilde{S}^{-1/2} H^{core} S^{-1/2}$$
+1. Form an initial Fock matrix F, in the orthonormal basis using the core Hamiltonian H<sub>core</sub>. 
 
+	$$F'_0 = \tilde{S}^{-1/2} H^{core} S^{-1/2}$$
 2. Diagonalise F
 
-$$F'_0C'_0 = C'_0\epsilon$$
-
+	$$F'_0C'_0 = C'_0\epsilon$$
 3. Transform the resulting eigenvectors into the original (non-orthonormal) basis
 
-$$C_0= S^{-1/2} C'_0$$
-
+	$$C_0= S^{-1/2} C'_0$$
 4. Construct the initial-guess density matrix. 
 
-$$D_{rs}^0 = 2 \sum_m^{occ}(C_0)_r^m(C_0)_s^m$$
+	$$D_{rs}^0 = 2 \sum_m^{occ}(C_0)_r^m(C_0)_s^m$$
 
 ### Step5: Calculation of two-electron integrals
 
@@ -180,32 +179,28 @@ $$(rs|tu)=(rs|ut)=(sr|tu)=(sr|ut)=(tu|rs)=(tu|sr)=(ut|rs)=(ut|sr)$$
 
 1. Form the new Fock matrix including the two-electron contribution.
 
-$$F_{rs}=H^{core}_{rs} + \sum_{t=1}^m\sum_{u=1}^m P_{tu}[(rs|tu)-\frac{1}{2}(ru|ts)]
-=T_{rs} + V_{rs}(H) +V_{rs}(He)+G_{rs}$$
+	$$F_{rs}=H^{core}_{rs} + \sum_{t=1}^m\sum_{u=1}^m P_{tu}[(rs|tu)-\frac{1}{2}(ru|ts)]
+	=T_{rs} + V_{rs}(H) +V_{rs}(He)+G_{rs}$$
 
 ### Step6: The Self-Consistent Field Iteration
 
 1. Transform the new Fock matrix to the orthonormal basis.
 
-$$F' = \tilde{S}^{-1/2} H^{core} S^{-1/2}$$
-
+	$$F' = \tilde{S}^{-1/2} H^{core} S^{-1/2}$$
 2. Transform the resulting eigenvectors into the original (non-orthonormal) basis
 
-$$C= S^{-1/2} C'$$
-
+	$$C= S^{-1/2} C'$$
 3. Construct the new-guess density matrix.
 
-$$D_{rs}^0 = 2 \sum_m^{occ}(C)_r^m(C)_s^m$$
-
+	$$D_{rs}^0 = 2 \sum_m^{occ}(C)_r^m(C)_s^m$$
 4. Test for convergence using delta and keep repeating this procedure till you get a converged value of delta and energy. 
 
-$$\left[\frac{\sum_{rs}^{AO}(D_{rs}^i-D_{rs}^{i-1})}{4}\right]^{1/2} <\delta_1$$
+	$$\left[\frac{\sum_{rs}^{AO}(D_{rs}^i-D_{rs}^{i-1})}{4}\right]^{1/2} <\delta_1$$
 
-$$E_{elec}^i = \sum_{rs}^{AO}\frac{1}{2}P_{rs}^i(H_{rs}^{core}+F_{rs})$$
-
+	$$E_{elec}^i = \sum_{rs}^{AO}\frac{1}{2}P_{rs}^i(H_{rs}^{core}+F_{rs})$$
 5. After the convergence is achieved, display the final energy by computing total electronic energy and adding to it the nuclear energy which is given in the text file.
 
-$$E_{total}^0 = E_{elec}^0 +E_{nuc}$$
+	$$E_{total}^0 = E_{elec}^0 +E_{nuc}$$
 
 ```python
 #This function is to form initial Fock matrix in the orthonormal basis
