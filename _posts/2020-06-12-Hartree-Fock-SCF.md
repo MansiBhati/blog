@@ -117,7 +117,7 @@ Here V<sub>11</sub>(H) represents the attraction of an electron in $$\phi_1$$ to
 	$$S_{rs} = \int \phi_r(r)\phi_s(r)dr$$
 2. Diagonalise this overlap matrix S.
 
- 	$$S = P.D.P^{-1}$$
+	$$S = P.D.P^{-1}$$
 3. Calculate D<sup>-1/2</sup>
 
 4. Build the symmetric orthogonalisation matrix S<sup>-1/2</sup>
