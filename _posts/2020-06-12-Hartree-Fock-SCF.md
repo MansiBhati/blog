@@ -84,6 +84,7 @@ for i in range(m):
 ```
 
 ```python
+#Output:
 Nuclear Attraction Intergrals:
 -2.2855 -1.5555
 -1.5555 -3.4639
@@ -310,7 +311,7 @@ while(i<maxit):
         break
 ```
 ```python
-Output:
+#Output:
 E 1 = -3.3370117315590293
 E 2 = -2.40903883091145
 E 3 = -2.4313259673325143
