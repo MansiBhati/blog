@@ -106,3 +106,30 @@ $$V(He)= \left( \begin{array}{cc} -1.2555 & -1.1110 \\ -1.1110 & -2.8076 \end{ar
 The total potential energy matrix can be disintegrated into the magnitude of attraction of the electron to the H and He nucleus. Here V<sub>11</sub>(H) represents the attraction of an electron in $$\phi_1$$ to the hydrogen nucleus which is understandably larger than the V<sub>22</sub>(H) representing the attraction of an electron in $$\phi_2$$ to the hydrogen nucleus since the electron in $$\phi_1 \:(\phi(H))$$ is attracted more strongly to the H nucleus than the electron in $$\phi_2 \:(\phi(He))$$. While V<sub>12</sub>(H) represents the attraction of an electron present in the H(1s)-He(1s) overlap region to the H nucleus. Similar arguments are true for V(He) also. 
 
 
+### Step3: Calculation of orthogonalising matrix. The S-1/2 matrix.
+
+1. Read the overlap integral file and store them as a numpy array. 
+
+1. Diagonalising the overlap matrix S.
+
+$$S = P.D.P^{-1}$$
+
+1. Calculating D-1/2
+
+1. Build the symmetric orthogonalisation matrix S-1/2
+
+$$S^{-1/2} = PD^{-1/2}P{-1}$$
+
+```python
+for i in Sf: 
+    S[i[0]-1,i[1]-1] = i[2]
+    S[i[1]-1,i[0]-1] = i[2]
+
+#print('The overlap matrix is:\n\n', S,'\n\n')
+    
+eigval = la.eig(S)
+Pi = eigval[1]
+Di = np.diag(eigval[0].real**(-0.5))
+Sh = Pi @ Di @ la.inv(Pi)
+#print('S^-1/2 Matrix:\n\n', Sh,'\n\n') 
+```
