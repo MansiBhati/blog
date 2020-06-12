@@ -133,3 +133,23 @@ Di = np.diag(eigval[0].real**(-0.5))
 Sh = Pi @ Di @ la.inv(Pi)
 #print('S^-1/2 Matrix:\n\n', Sh,'\n\n') 
 ```
+```python
+The overlap matrix is:
+1.0 0.5071
+0.5071 1.0
+
+
+S^-1/2 Matrix:
+1.11946687 -0.30489583
+-0.30489583 1.11946687
+```
+
+### Step4: Calculation of initial guess density matrix
+ 
+1. Form an initial Fock matrix F, in the orthonormal basis using the core Hamiltonian H_core.
+
+1. Diagonalise F
+
+1. Transform the resulting eigenvectors into the original (non-orthonormal) basis
+
+1. Construct the initial-guess density matrix. 
