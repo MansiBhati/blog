@@ -26,7 +26,9 @@ Here we extract all the 1-electron integrals needed to form the Fock matrix from
 They are called one-electron integrals since they involve coordinates of only one electron at a time. 
 
 $$T_{rs} = \int \phi_r(r)\left(-\frac{1}{2}\nabla_r^2\right)\phi_s(r)dr$$
+
 $$V_{rs} = \int \phi_r(r)\left(-\sum_A^N\frac{Z}{r_A}\right)\phi_s(r)dr$$
+
 $$H^{core}_{rs} =T_{rs} + V_{rs}(H) +V_{rs}(He)$$
 
 ```python
@@ -79,7 +81,7 @@ for i in range(m):
 #print('Core Hamiltoninan:\n\n', H,'\n\n')  
 ```
 
-```
+```output
 Nuclear Attraction Intergrals:
 -2.2855 -1.5555
 -1.5555 -3.4639
