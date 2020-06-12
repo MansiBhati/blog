@@ -312,6 +312,7 @@ while(i<maxit):
         break
 ```
 ```python
+Output:
 E 1 = -3.3370117315590293
 E 2 = -2.40903883091145
 E 3 = -2.4313259673325143
@@ -332,8 +333,8 @@ One should realise that modern ab-initio software doesn’t rigidly use the abov
 
 1. Use the symmetry of the molecules to avoid duplicate calculations.
 
-1. Testing two-electron integrals, if they are too small to neglect ( in case for the functions with far separated nuclei, this decreases the calculation time from n<sup>4</sup> to about n<sup>2.3</sup> dependence)
+1. Extremely small two-electron integrals can be neglected, this happens in case for the functions with far separated nuclei, this decreases the calculation time from n<sup>4</sup> to about n<sup>2.3</sup> dependence.
 
-1. Pseudo-spectral method-Representing the molecular orbitals as a set of grid points, in addition to a basis set expansion, this surpasses the need to explicitly calculate the two-electron integrals, which increases the speed by a factor of three-four. 
+1. Use of pseudo-spectral method which represents the molecular orbitals as a set of grid points, in addition to a basis set expansion is done. This surpasses the need to explicitly calculate the two-electron integrals, which increases the computational speed by a factor of three-four. 
 
-1. Fast-multipole method- For very large systems, the Coulomb repulsion for distant regions is between points at the center of the regions.
+1. Use of Fast-multipole method is employed, which considers the Coulomb repulsion for distant regions in very large systems as the center of the regions.
