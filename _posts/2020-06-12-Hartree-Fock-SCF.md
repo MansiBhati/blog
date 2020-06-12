@@ -5,7 +5,7 @@ title: Hartree-Fock SCF
 <div style="text-align: justify"> I believe the best way to understand the Hartree-Fock Self-Consistent Field Procedure is by actually applying it to a system. Therefore, I have taken an example of the simplest closed-shell heteronuclear molecule, the H—He+ molecule, and solved for its energies using the STO-1G basis set. Here, I have written python code to approach this problem.</div>
 * * *
 
-### Step 1: Specify the geometry and basis set for the molecule.
+### Step1: Specify the geometry and basis set for the molecule.
 
 
 The bond length is taken to be 0.800 Å i.e. 1.5117 a.u. (bohr). Here I will use the simplest Gaussian basis set, i.e. 1s atomic orbital on each of the atoms is approximated by one s type Gaussian function. An s-type Gaussian function: 
@@ -20,9 +20,9 @@ $$\phi(He)=\phi_2=0.5881 \exp(-0.7739 |r-R_2|^2)$$
 
 Here **(r-Ri)** is the distance of the electron in $$\phi_i$$ from i<sup>th</sup> nucleus.The b constant in the helium exponent is larger when compared to hydrogen (0.7739 vs. 0.4166) since an electron in $$\phi_2$$ is more tightly bound to the doubly charged helium nucleus when compared to singly charged hydrogen nucleus. Thus, the electron density of the Helium nucleus falls off more quickly.
 
-### Step 2: Calculation of one electron integrals.
+### Step2: Calculation of one electron integrals.
 
-Here we extract all the 1-electron integrals needed to form the Fock matrix from their respective files and then store them as matrices. To form core Hamiltonian H<sup>core</sup> we add the kinetic energy integral to the two potential energy intervals, V(H) and V(He). 
+Here we extract all the one-electron integrals needed to form the Fock matrix from their respective files and then store them as matrices. To form core Hamiltonian H<sup>core</sup> we add the kinetic energy integral to the two potential energy intervals, V(H) and V(He). 
 They are called one-electron integrals since they involve coordinates of only one electron at a time. 
 
 $$T_{rs} = \int \phi_r(r)\left(-\frac{1}{2}\nabla_r^2\right)\phi_s(r)dr$$
@@ -108,7 +108,7 @@ The total potential energy matrix can be disintegrated into the magnitude of att
 
 ### Step3: Calculation of orthogonalising matrix. The S-1/2 matrix.
 
-1. Read the overlap integral file and store them as a numpy array. 
+1. Read the overlap integral file and store them as a NumPy array. 
 
 1. Diagonalising the overlap matrix S.
 
@@ -146,10 +146,161 @@ S^-1/2 Matrix:
 
 ### Step4: Calculation of initial guess density matrix
  
-1. Form an initial Fock matrix F, in the orthonormal basis using the core Hamiltonian H_core.
+1. Form an initial Fock matrix F, in the orthonormal basis using the core Hamiltonian H<sub>core</sub>.
 
 1. Diagonalise F
 
 1. Transform the resulting eigenvectors into the original (non-orthonormal) basis
 
 1. Construct the initial-guess density matrix. 
+
+### Step5: Calculation of two-electron integrals
+
+Grs equation 5.104
+Therefore, each element of the electron repulsion matrix G has eight 2-electron repulsion integrals, making up a total of 32 integrals. However, many of these are the same, and there are only six unique 2-electron repulsion integrals given in the file. 
+
+Read these unique two-integrals from the file and store them in a one-dimensional array using a compound index. 
+Form the new Fock matrix including the two-electron contribution. 
+
+### Step6: The Self-Consistent Field Iteration
+
+1.Transform the new Fock matrix to the orthonormal basis.
+
+1. Transform the resulting eigenvectors into the original (non-orthonormal) basis
+
+1. Construct the new-guess density matrix.
+
+1. Test for convergence using delta.
+
+1. Display the final energy by computing total electronic energy and adding to it the nuclear energy read from the text file.
+
+```python
+#This function is to form initial Fock matrix in the orthonormal basis
+def Fini(F):
+    Fo = np.transpose(Sh) @ F @ Sh
+    return Fo
+
+#This is to tranform the resulting eigenvectors into the original
+#(non-orthonormal) basis    
+def Cmat(M):
+    Foeig = la.eigh(M)
+    C = Sh @ Foeig[1]
+    return C,Foeig[0]
+
+#This is to construct density matrix and store the older values for convergence
+#test
+def Dmat(C,P):
+    OldD = np.zeros((m,m))
+    for i in range(m):    
+        for j in range(m): 
+            OldD[i,j]=P[i,j]
+            P[i,j] = 0.0
+            for s in range(0,Ne//2):
+                P[i,j] = P[i,j] + 2*C[i,s]*C[j,s]
+                #print(C[i,s]*C[j,s])
+    return P,OldD
+
+#This maps the permutaionally unique two-electron integrals into a compound 
+#index.
+def eint(a,b,c,d):  
+    if a > b: ab = a*(a+1)/2 + b  
+    else: ab = b*(b+1)/2 + a  
+    if c > d: cd = c*(c+1)/2 + d  
+    else: cd = d*(d+1)/2 + c  
+    if ab > cd: abcd = ab*(ab+1)/2 + cd  
+    else: abcd = cd*(cd+1)/2 + ab  
+    return abcd
+
+#It is done to assign value to the two electron integral.
+def tei(a,b,c,d):  
+    return twoe.get(eint(a,b,c,d),0.0)
+
+#This function gives final Fock matrix.
+def Fmat(H, P):
+    F = np.zeros((m,m))  
+    for i in range(0,m):  
+        for j in range(0,m):  
+            F[i,j] = H[i,j]  
+            for k in range(0,m):  
+                for l in range(0,m):  
+                    F[i,j] = F[i,j] + P[k,l]*(tei(i+1,j+1,k+1,l+1)-0.5e0*tei(i+1,k+1,j+1,l+1))
+    return F
+
+#It calculates delta value used for the test of convergence
+def Delta(P,OldD):
+   delta = 0.0e0  
+   for i in range(0,m):  
+       for j in range(0,m):  
+           delta = delta+((P[i,j]-OldD[i,j])**2)  
+   delta = (delta/4)**(0.5)  
+   return delta
+
+#It calculates the electronic energy
+def Eelec(P, H, F):
+    E = 0.0  
+    for i in range(0,m):  
+        for j in range(0,m):  
+            E = E + 0.5*P[i,j]*(H[i,j] + F[i,j])  
+    return E  
+
+twoe = {eint(i[0],i[1],i[2],i[3]) : i[4] for i in erif}
+    
+delta =1.0
+convergence=0.00000001 
+
+
+i=0
+#to define maximum number of iterations
+maxit=20
+P = np.zeros((m,m))
+
+while(i<maxit):
+    i +=1
+    
+    if (delta>convergence):
+        F=Fmat(H, P)
+        #print('F',i,'=',F)
+        Fi=Fini(F)
+        #print('Fi',i,'=',Fi)
+        C,Foeig=Cmat(Fi)
+        #print('C',i,'=',C)
+        #print('C',i,'=',Foeig)
+        P,OldD=Dmat(C,P)
+        #print('Do',i,'=',P)
+        #print('Dold',i,'=',OldD)
+        delta=Delta(P,OldD)
+        #print('delta=',delta)
+        E=Eelec(P, H, F)
+        #print('E',i,'=',E+Enuc)
+        continue
+    
+    else:
+        print('Convergence achieved!')
+        break
+```
+```python
+E 1 = -3.3370117315590293
+E 2 = -2.40903883091145
+E 3 = -2.4313259673325143
+E 4 = -2.435384003832221
+E 5 = -2.436097100960776
+E 6 = -2.4362218038169208
+E 7 = -2.4362435940809237
+E 8 = -2.4362474011412343
+E 9 = -2.436248066271592
+E 10 = -2.4362481824758366
+E 11 = -2.436248202777747
+E 12 = -2.43624820632467
+Convergence achieved!
+```
+***
+
+One should realise that modern ab-initio software doesn’t rigidly use the above SCF procedure. To speed up the calculations, they incorporate a variety of other techniques such as:
+
+1. Use the symmetry of the molecules to avoid duplicate calculations.
+
+1. Testing two-electron integrals, if they are too small to neglect ( in case for the functions with far separated nuclei, this decreases the calculation time from n<sup>4</sup> to about n<sup>2.3</sup> dependence)
+
+1. Pseudo-spectral method-Representing the molecular orbitals as a set of grid points, in addition to a basis set expansion, this surpasses the need to explicitly calculate the two-electron integrals, which increases the speed by a factor of three-four. 
+
+1. Fast-multipole method- For very large systems, the Coulomb repulsion for distant regions is between points at the center of the regions.
