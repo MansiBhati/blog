@@ -114,15 +114,15 @@ Here V<sub>11</sub>(H) represents the attraction of an electron in $$\phi_1$$ to
 
 1. Overlap intergrals are calculated using the given formula, and are already stored in the .txt file. Read the file and store it as a NumPy array.
 
-$$S_{rs} = \int \phi_r(r)\phi_s(r)dr$$
+	$$S_{rs} = \int \phi_r(r)\phi_s(r)dr$$
 2. Diagonalise this overlap matrix S.
 
-$$S = P.D.P^{-1}$$
+ 	$$S = P.D.P^{-1}$$
 3. Calculate D<sup>-1/2</sup>
 
 4. Build the symmetric orthogonalisation matrix S<sup>-1/2</sup>
 
-$$S^{-1/2} = PD^{-1/2}P^{-1}$$
+	$$S^{-1/2} = PD^{-1/2}P^{-1}$$
 
 ```python
 for i in Sf: 
