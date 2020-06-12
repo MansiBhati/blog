@@ -8,7 +8,7 @@ title: Hartree-Fock SCF
 ### Step1: Specify the geometry and basis set for the molecule.
 
 
-The bond length is taken to be 0.800 Å i.e. 1.5117 a.u. (bohr). Here I will use the simplest Gaussian basis set, i.e. 1s atomic orbital on each of the atoms is approximated by one s type Gaussian function. An s-type Gaussian function: 
+The bond length is taken to be 0.800 Å i.e. 1.5117 a.u. (bohr). I will use the simplest Gaussian basis set, i.e. 1s atomic orbital on each of the atoms is approximated by one s type Gaussian function. An s-type Gaussian function: 
 
 $$\phi=a.\exp(-br^2)$$
 
@@ -18,14 +18,13 @@ $$\phi(H)=\phi_1=0.3696 \exp(-0.4166 |r-R_1|^2)$$
 
 $$\phi(He)=\phi_2=0.5881 \exp(-0.7739 |r-R_2|^2)$$
 
-Here **(r-Ri)** is the distance of the electron in $$\phi_i$$ from i<sup>th</sup> nucleus.The b constant in the helium exponent is larger when compared to hydrogen (0.7739 vs. 0.4166) since an electron in $$\phi_2$$ is more tightly bound to the doubly charged helium nucleus when compared to singly charged hydrogen nucleus. Thus, the electron density of the Helium nucleus falls off more quickly.
+Here **(r-Ri)** is the distance of the electron in $$\phi_i$$ from i<sup>th</sup> nucleus as shown in the schematic. The b constant in the helium exponent is larger when compared to hydrogen (0.7739 vs. 0.4166) since an electron in $$\phi_2$$ is more tightly bound to the doubly charged helium nucleus when compared to a singly charged hydrogen nucleus. Thus, the electron density of the Helium nucleus falls off more quickly.
 
 ![Image]({{site.baseurl}}/assets/images/1.jpg "Coordinate system")
 
 ### Step2: Calculation of one electron integrals.
 
-Here we extract all the one-electron integrals needed to form the Fock matrix from their respective files and then store them as matrices. To form core Hamiltonian H<sup>core</sup> we add the kinetic energy integral to the two potential energy intervals, V(H) and V(He). 
-They are called one-electron integrals since they involve coordinates of only one electron at a time. 
+The first step in the pythppn program is to extract all the one-electron integrals needed to form the Fock matrix from their respective files and then store them as matrices. To form core Hamiltonian H<sup>core</sup> we add the kinetic energy integral of the electron to the two potential energy integrals, V(H) and V(He). They are called one-electron integrals since they involve coordinates of only one electron at a moment. They are calculated using:
 
 $$T_{rs} = \int \phi_r(r)\left(-\frac{1}{2}\nabla_r^2\right)\phi_s(r)dr$$
 
@@ -100,28 +99,30 @@ Core Hamiltoninan:
 -1.3160 -2.3030
 ```
 
-Here we observe that T<sub>11</sub> is smaller than T<sub>22</sub> i.e. the kinetic energy of an electron in $$\phi_1 \:(\phi(H))$$ is smaller than an electron in $$\phi_2 \:(\phi(He))$$ which is expected as the electron around the stronger-pulling He nucleus needs to move faster to stay in its orbit around it. While T<sub>11</sub> denotes the kinetic energy of the electron in the H(1s)-He(1s) overlap region. 
+Here we observe that T<sub>11</sub> is smaller than T<sub>22</sub> i.e. the kinetic energy of an electron in $$\phi_1 \:(\phi(H))$$ is smaller than an electron in $$\phi_2 \:(\phi(He))$$ which is expected as the electron around the stronger-pulling He nucleus needs to move faster to stay in its orbit. While T<sub>12</sub> denotes the kinetic energy of the electron in the H(1s)-He(1s) overlap region. 
 
-$$V(H)= \left( \begin{array}{cc} -1.0300 & -0.4445 \\ -0.4445 & -0.6563 \end{array} \right) $$
+Also, the total potential energy matrix can be disintegrated into the magnitude of attraction of the electron to the H and He nucleus.
+
+$$V(H)= \left( \begin{array}{cc} V_{11} & V_{12} \\ V_{21} & V_{22} \end{array} \right)=\left( \begin{array}{cc} -1.0300 & -0.4445 \\ -0.4445 & -0.6563 \end{array} \right) $$
 
 $$V(He)= \left( \begin{array}{cc} -1.2555 & -1.1110 \\ -1.1110 & -2.8076 \end{array} \right) $$
 
-The total potential energy matrix can be disintegrated into the magnitude of attraction of the electron to the H and He nucleus. Here V<sub>11</sub>(H) represents the attraction of an electron in $$\phi_1$$ to the hydrogen nucleus which is understandably larger than the V<sub>22</sub>(H) representing the attraction of an electron in $$\phi_2$$ to the hydrogen nucleus since the electron in $$\phi_1 \:(\phi(H))$$ is attracted more strongly to the H nucleus than the electron in $$\phi_2 \:(\phi(He))$$. While V<sub>12</sub>(H) represents the attraction of an electron present in the H(1s)-He(1s) overlap region to the H nucleus. Similar arguments are true for V(He) also. 
+Here V<sub>11</sub>(H) represents the attraction of an electron in $$\phi_1$$ to the hydrogen nucleus which is understandably larger than the V<sub>22</sub>(H) representing the attraction of an electron in $$\phi_2$$ to the hydrogen nucleus since the electron in $$\phi_1 \:(\phi(H))$$ is attracted more strongly to the H nucleus than the electron in $$\phi_2 \:(\phi(He))$$. While V<sub>12</sub>(H) represents the attraction of an electron present in the H(1s)-He(1s) overlap region to the H nucleus. Similar arguments are true for V(He) also. 
 
 
 ### Step3: Calculation of orthogonalising matrix. The S-1/2 matrix.
 
-1. Read the overlap integral file and store them as a NumPy array. 
+1. Overlap intergrals are calculated using the given formula, and are already stored in the .txt file. Read the file and store it as a NumPy array.
 
 $$S_{rs} = \int \phi_r(r)\phi_s(r)dr$$
 
-1. Diagonalising the overlap matrix S.
+2. Diagonalise this overlap matrix S.
 
 $$S = P.D.P^{-1}$$
 
-1. Calculating D-1/2
+3. Calculate D<sup>-1/2</sup>
 
-1. Build the symmetric orthogonalisation matrix S-1/2
+4. Build the symmetric orthogonalisation matrix S<sup>-1/2</sup>
 
 $$S^{-1/2} = PD^{-1/2}P^{-1}$$
 
@@ -155,23 +156,25 @@ S^-1/2 Matrix:
 
 $$F_0' = \tilde{S}^{-1/2} H^{core} S^{-1/2}$$
 
-1. Diagonalise F
+2. Diagonalise F
 
 $$F_0'C_0' = C_0'\epsilon$$
 
-1. Transform the resulting eigenvectors into the original (non-orthonormal) basis
+3. Transform the resulting eigenvectors into the original (non-orthonormal) basis
 
 $$C_0= S^{-1/2} C_0'$$
 
-1. Construct the initial-guess density matrix. 
+4. Construct the initial-guess density matrix. 
 
 $$D_{rs}^0 = 2 \sum_m^{occ}(C_0)_r^m(C_0)_s^m$$
 
 ### Step5: Calculation of two-electron integrals
 
-$$+G_{rs}= \sum_{t=1}^m\sum_{u=1}^m P_{tu}[(rs|tu)-\frac{1}{2}(ru|ts)]$$
+The two-electron integrals giving the repulsion between the electrons are calculated by the given formula:
 
-Therefore, each element of the electron repulsion matrix G has eight 2-electron repulsion integrals, making up a total of 32 integrals. However, many of these are the same, and there are only six unique 2-electron repulsion integrals given in the file. 
+$$P_{rs}= \sum_{t=1}^m\sum_{u=1}^m P_{tu}[(rs|tu)-\frac{1}{2}(ru|ts)]$$
+
+Therefore, each element of the electron repulsion matrix G has eight 2-electron repulsion integrals, making up a total of 32 integrals. However, many of these are the same, and there exists only six unique 2-electron repulsion integrals which are given in the file. 
 
 $$(rs|tu)=(rs|ut)=(sr|tu)=(sr|ut)=(tu|rs)=(tu|sr)=(ut|rs)=(ut|sr)$$
 
@@ -190,19 +193,21 @@ $$F_{rs}=H^{core}_{rs} + \sum_{t=1}^m\sum_{u=1}^m P_{tu}[(rs|tu)-\frac{1}{2}(ru|
 
 $$F' = \~{S^{-1/2}} H^{core} S^{-1/2}$$
 
-1. Transform the resulting eigenvectors into the original (non-orthonormal) basis
+2. Transform the resulting eigenvectors into the original (non-orthonormal) basis
 
 $$C= S^{-1/2} C'$$
 
-1. Construct the new-guess density matrix.
+3. Construct the new-guess density matrix.
 
 $$D_{rs}^0 = 2 \sum_m^{occ}(C)_r^m(C)_s^m$$
 
-1. Test for convergence using delta.
+4. Test for convergence using delta and keep repeating this procedure till you get a converged value of delta and energy. 
 
 $$\left[\frac{\sum_{rs}^{AO}(D_{rs}^i-D_{rs}^{i-1})}{4}\right]^{1/2} <\delta_1$$
 
-1. Display the final energy by computing total electronic energy and adding to it the nuclear energy read from the text file.
+$$E_{elec}^i = \sum_{rs}^{AO}\frac{1}{2}P_{rs}^i(H_{rs}^{core}+F_{rs})$$
+
+5. After the convergence is achieved, display the final energy by computing total electronic energy and adding to it the nuclear energy which is given in the text file.
 
 $$E_{total}^0 = E_{elec}^0 +E_{nuc}$$
 
